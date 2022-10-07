@@ -31,8 +31,8 @@ module DrySchema
     extend  ClassMethods 
     include Initializer
 
-    attribute :order_id, Types::String
-    attribute :placed_at, Types::Time
-    attribute :total_amount, Types::Decimal
+    attribute :order_id, Types::Strict::String
+    attribute :placed_at, Types::Params::Time
+    attribute :total_amount, Types::Params::Decimal
   end
 end
