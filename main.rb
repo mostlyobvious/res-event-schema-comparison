@@ -1,6 +1,7 @@
 require "ruby_event_store/profiler"
 require "active_support"
 require "active_support/notifications"
+require "json"
 
 require_relative "lib/no_schema"
 require_relative "lib/dry_schema"
@@ -19,7 +20,7 @@ sample_data = {
   total_amount: BigDecimal("100.99")
 }
 
-count = 100
+count = 1000
 
 mk_event_store = lambda do
   RubyEventStore::Client.new(
@@ -36,11 +37,15 @@ mk_event_store = lambda do
   )
 end
 
+def simulate_lossy_storage_transform(data)
+  JSON.parse(JSON.dump(data), symbolize_names: true)
+end
+
 experiments.each do |name, event_klass|
   puts name
   puts
   event_store = mk_event_store.call
-  event_store.append(count.times.map { event_klass.new(data: sample_data) })
+  event_store.append(count.times.map { event_klass.new(data: simulate_lossy_storage_transform(sample_data)) })
   profiler.measure do
     event_store.read.to_a
   end
