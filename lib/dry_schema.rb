@@ -23,7 +23,8 @@ module DrySchema
 
   module Initializer
     def initialize(event_id: SecureRandom.uuid, metadata: nil, data: {})
-      super(event_id:, metadata:, data: data.deep_merge(self.class.schema.new(data).to_h))
+      by_schema = self.class.schema.new(data).to_h
+      super(event_id:, metadata:, data: data.merge(by_schema))
     end
   end
 

@@ -5,13 +5,16 @@ require "json"
 
 require_relative "lib/no_schema"
 require_relative "lib/dry_schema"
+require_relative "lib/ama_schema"
+
 
 instrumenter = ActiveSupport::Notifications
 profiler = RubyEventStore::Profiler.new(instrumenter)
 
 experiments = [
   ["no-schema", NoSchema::OrderPlaced],
-  ["dry-struct", DrySchema::OrderPlaced]
+  ["dry-struct", DrySchema::OrderPlaced],
+  ["active-model-attributes", AmaSchema::OrderPlaced]
 ]
 
 sample_data = {
